@@ -37,12 +37,12 @@ public class RestServiceImpl implements RestService {
 	private SadminDao sadminDao;
 	
 	//method1
-//	@Override
-//	public List<City> getlist(){
-//		List<City> returnCity = new ArrayList<City>();
-//		returnCity = mysqlDao.getList();
-//		return returnCity;
-//	}
+	@Override
+	public List<City> getlist(){
+		List<City> returnCity = new ArrayList<City>();
+		returnCity = mysqlDao.getList();
+		return returnCity;
+	}
 	
 	//method2
 	@Override

@@ -1,26 +1,26 @@
-spring:
-  profiles: default
-
-datasource:
-  map:
-      initialize: true
-      driver-class-name: "com.mysql.jdbc.Driver"
-      url: "jdbc:mysql://localhost/world?verifyServerCertificate?=false&useSSL=false"
-      user-name: "root"
-      password: "root"
-      initial-size: 10
-      max-active: 10
-      max-idle: 10
-      min-idle: 10
-      max-wait: 3000
-  admin:
-      initialize: true
-      driver-class-name: "com.mysql.jdbc.Driver"
-      url: "jdbc:mysql://localhost/world?verifyServerCertificate?=false&useSSL=false"
-      user-name: "root"
-      password: "root"
-      initial-size: 10
-      max-active: 10
-      max-idle: 10
-      min-idle: 10
-      max-wait: 3000
+#SPRING:
+#  PROFILES: DEFAULT
+#
+#DATASOURCE:
+#  MAP:
+#      INITIALIZE: TRUE
+#      DRIVER-CLASS-NAME: "COM.MYSQL.JDBC.DRIVER"
+#      URL: "JDBC:MYSQL://LOCALHOST/WORLD?VERIFYSERVERCERTIFICATE?=FALSE&USESSL=FALSE"
+#      USER-NAME: "ROOT"
+#      PASSWORD: "ROOT"
+#      INITIAL-SIZE: 10
+#      MAX-ACTIVE: 10
+#      MAX-IDLE: 10
+#      MIN-IDLE: 10
+#      MAX-WAIT: 3000
+#  ADMIN:
+#      INITIALIZE: TRUE
+#      DRIVER-CLASS-NAME: "COM.MYSQL.JDBC.DRIVER"
+#      URL: "JDBC:MYSQL://LOCALHOST/WORLD?VERIFYSERVERCERTIFICATE?=FALSE&USESSL=FALSE"
+#      USER-NAME: "ROOT"
+#      PASSWORD: "ROOT"
+#      INITIAL-SIZE: 10
+#      MAX-ACTIVE: 10
+#      MAX-IDLE: 10
+#      MIN-IDLE: 10
+#      MAX-WAIT: 3000

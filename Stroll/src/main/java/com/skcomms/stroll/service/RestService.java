@@ -10,7 +10,7 @@ import com.skcomms.stroll.entity.City;
 @Service
 public interface RestService {
 
-//	public List<City> getlist();
+	public List<City> getlist();
 	public List<City> getMybatisList(City city);
 	public List<City> getMybatis1List(City city);
 	public List<City> getMybatis2List(City city);

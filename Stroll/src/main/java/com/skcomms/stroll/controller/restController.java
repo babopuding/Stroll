@@ -24,7 +24,7 @@ public class restController {
 		
 		List<City> returnCity = new ArrayList<City>();
 		
-//		returnCity = restService.getlist();
+		returnCity = restService.getlist();
 		
 		return returnCity;
 		
