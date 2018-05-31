@@ -1,0 +1,71 @@
+
+<div id="app" v-cloak>
+  <div v-if=��!error��>
+    <ul>
+      <li v-for="item in result">
+        <a :href="item.url">{{ item.text }}</a>
+      </li>
+    <ul>
+  </div>
+  <p v-else-if="error">��Ʈ��ũ ������ �߻��߽��ϴ�. �ٽ� �õ����ּ���.</p>
+</div>
+
+<script src="/js/vue.js"></script>
+<script>
+var mixin = {
+  ajax:{
+    data:{
+      error:0, // ��������
+      loading:true, // ��Ż���
+      result:{} // �˻���� �����
+    },
+    methods:{
+      getData:function(){
+        var _this = this;
+        _this.loading = true;
+        $.ajax({
+          url: _this.request.url,
+          type: 'POST',
+          dataType: 'JSON',
+          timeout : 30000,
+          data:_this.request.data
+        })
+        .done(function(response) {
+          // ����� result�� ����, ���� ���°����� ���� ������ �Ϸ���·� ����
+          _this.error = 0;
+          _this.loading = false;
+          _this.result = response;
+        })
+        .fail(function(error) {
+          // ��ſ����� �ٽ� �õ�
+          // ��õ� Ƚ���� ������ ���� �����ϸ� ���°����� ���� ������ ������Ʈ ajax����
+          if(_this.error <= 5){
+            _this.error++;
+            _this.getData();
+          }else{
+            _this.error = true;
+            _this.loading = false;
+          }
+        });
+      }
+    },
+    mounted:function(){
+      // Ajax ����
+      this.getData();
+    }
+  }
+}
+
+var app = new Vue({
+  el:'#app',
+  mixins: [mixin.ajax],
+  data:{
+    request:{
+      url:'http://localhost:8080/demo/list', // ȣ�� url
+      data:{ // ��û ������
+        posts: []
+      }
+    }
+  }
+});
+</script>

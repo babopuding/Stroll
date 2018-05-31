@@ -1,0 +1,158 @@
+<link rel="stylesheet" type="text/css" href="/css/all.css">
+<link rel="stylesheet" type="text/css" href="/css/test.css">
+
+<div id="app">
+	<!-- 상단 상태결과 텍스트 표출 -->
+	<div class="toastContainer">
+		<div class="toast" v-for="tst in toastMessages"
+			:style="{background: tst.toastBackground}">{{tst.state}}</div>
+	</div>
+	
+	<!-- 좌상단 사이드메뉴 버튼 -->
+	<img src="/img/menu1.png" class="showMenu" @click="showMenu" style="width:30px;height:30px"/>
+<!-- 		<i class="fas fa-bars"></i> -->
+
+	<!-- 좌측 사이드 메뉴 -->
+	<div class="addWrapper" :class="{show: toggled}">
+		<h3>Text settings</h3>
+		<span>Title or paragaph?</span> <select v-model="type">
+			<option selected>Title</option>
+			<option>Paragraph</option>
+		</select> 
+		<br> 
+		<input v-if="type == 'Title'" type="text" id="addText"
+			@keydown.enter="addText" v-model="newMessage"
+			:placeholder="hasError ? 'Can\'t be blank' : 'Type here something'"
+			:class="{error: hasError}">
+			
+		<textarea v-if="type == 'Paragraph'" type="text" id="addText"
+			@keydown.enter="addText" v-model="newMessage"
+			:placeholder="hasError ? 'Can\'t be blank' : 'Type here something'"
+			:class="{error: hasError}"></textarea>
+			
+		<img src="/img/menu2.jpg"  class="showMenu" @click="showMenu" style="width:30px;height:30px"/>
+<!-- 			<i class="fas fa-times"></i> -->
+		
+		<span>And pick a color</span>
+		<div class="colorpreview" :style="{backgroundColor: style.color}"></div>
+		<select v-model="style.color">
+			<option selected>White</option>
+			<option>Tomato</option>
+			<option>Violet</option>
+			<option>LightGray</option>
+		</select> 
+		<br> 
+		<span> How should it be aligned? </span> <select
+			v-model="style.align">
+			<option selected>Center</option>
+			<option>Left</option>
+			<option>Right</option>
+		</select> 
+		<br> 
+		<span>Font size in em's.</span> 
+		<input type="number" v-model="style.size"> 
+		<br>
+		<h4>Preview:</h4>
+		<div class="preview" :style="{color: style.color, textAlign: style.align}">{{ newMessage }}</div>
+		<br>
+		<button class="addButton" @click="addText">Add text</button>
+		<hr>
+		<h3>Spacing settings</h3>
+		<span>Space between text: <strong>{{style.spacing * 2}}px</strong></span>
+		<div class="slidecontainer">
+			<input type="range" min="1" max="100" v-model="style.spacing" class="slider" v-on:input="changeMarginVertical">
+		</div>
+		<br>
+		<span>Space around text: <strong>{{style.spaceAround}}px</strong></span>
+		<div class="slidecontainer">
+			<input type="range" min="1" max="90" v-model="style.spaceAround" class="slider" v-on:input="changeMarginHorizontal">
+		</div>
+	</div>
+
+
+
+	<!-- 더블클릭 했을때  input Textarea와 버튼3개 -->
+	<div class="text-wrapper"
+		:style="{marginTop: item.style.spacing, marginBottom: item.style.spacing, marginLeft: item.style.spaceAround, marginRight: item.style.spaceAround}"
+		v-for="(item, index) in items">
+
+		<h1 class="text read" title="Double click to edit text"
+			v-show="item.readMode" :class="['text' + index]"
+			:style="{color: item.style.color, fontSize: item.style.size, textAlign: item.style.align}"
+			v-on:dblclick="edit(index)">{{ item.message }}</h1>
+
+		<form v-show="item.editMode" :style="{justifyContent: item.style.flexAlign}">
+
+			<input v-if="item.type == 'Title'" :size="item.message.length + 1"
+				class="text edit" :class="['textarea' + index]" type="text"
+				v-model="item.message" @keydown.esc="cancel(index)"
+				:style="{color: item.style.color,fontSize: item.style.size}">
+
+			<textarea v-if="item.type == 'Paragraph'" class="text edit"
+				:class="['textarea' + index]" type="text" v-model="item.message"
+				@keydown.esc="cancel(index)"
+				:style="{color: item.style.color,fontSize: item.style.size, textAlign: item.style.align}"></textarea>
+
+			<button class="save" @click.prevent="save(index)">
+				<i class="fas fa-check"></i>
+			</button>
+			<button class="cancel" @click.prevent="cancel(index)">
+				<i class="fas fa-undo-alt"></i>
+			</button>
+			<button class="delete" @click.prevent="remove(index)">
+				<i class="fas fa-times"></i>
+			</button>
+
+		</form>
+	</div>
+
+	
+
+
+
+</div><!-- END APP -->
+<link rel="stylesheet" type="text/css" href="/css/grid.css">
+<script type="text/x-template" id="grid-template">
+  <table style="width:60%;margin:auto">
+    <thead>
+      <tr>
+        <th v-for="key in columns" @click="sortBy(key)" :class="{ active: sortKey == key }">
+          {{ key | capitalize }}
+          <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="entry in filteredData">
+        <td v-for="key in columns">
+          {{entry[key]}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</script>
+<div id="demo">
+	    <form id="search">
+	        <b>Search</b> <input name="query" v-model="searchQuery"> 
+	    </form>
+	    <demo-grid
+	        :data="gridData"
+	        :columns="gridColumns"
+	        :filter-key="searchQuery">
+	    <-grid>
+	    <br>
+	    <div style="width:60%;margin:auto;align:right">
+		<input type="text" v-model='addData.id' placeholder="id"/>
+		<input type="text" v-model='addData.name' placeholder="name"/>
+		<input type="text" v-model='addData.countryCode' placeholder="countryCode"/>
+		<input type="text" v-model='addData.district' placeholder="district"/>
+		<input type="text" v-model='addData.population' placeholder="population"/>
+		<button v-on:click="addRow">ADD</button>
+	    </div>
+	</div>
+
+
+
+	<script src="/js/vue.js"></script>
+	<script src="/js/test.js"></script>
+	<script src="/js/grid.js"></script>

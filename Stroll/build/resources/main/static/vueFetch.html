@@ -1,0 +1,80 @@
+<div id="app">
+	<h2>{{ product }} SAMPLE.</h2>
+	<button v-on:click="getdata">GET New DATA</button>
+	(��ư Ŭ�� �� REST API ȣ��!!)
+</div>
+
+<div id="list">
+	<h2>#1. Array example</h2>
+	(������ �ε� �� REST API ȣ��!!)
+	<ul>
+		<li v-for="param in params">{{ param.quantity }} {{ param.name }}
+			<span v-if="param.quantity === 0"> - OUT OF STOCK </span>
+			<button @click="param.quantity += 1">Plus</button>
+			<button @click="param.quantity -= 1">Minus</button>
+		</li>
+		<h3>Total Inventory : {{ totalProducts }}</h3>
+	</ul>
+</div>
+
+<script src="/js/vue.js"></script>
+<script>
+	const app = new Vue({
+		el: '#app',
+		data: {
+			product: '"REST API�� ��������  JSON data ����"'
+		},
+		methods: {
+	    	getdata: function (event) {
+		     	// �޼ҵ� �ȿ��� ����ϴ� `this` �� Vue �ν��Ͻ��� ����ŵ�ϴ�
+		      	console.log('Hello ' + this.name + '!')
+		     	 // `event` �� ����Ƽ�� DOM �̺�Ʈ�Դϴ�
+		      	if (event) {
+		        	console.log(event.target.tagName)
+		      	}
+		     	
+		      	fetchData();		     	
+		     	
+	    	}
+	  	}//end methods
+		
+	})
+	 
+	const list = new Vue(
+	{
+		el: '#list',
+		data: {
+		params: []
+	},
+	created: function() {
+		fetchData();
+	},
+	computed: {//���
+		totalProducts() {
+				return this.params.reduce((sum, param) => {
+				return sum + param.quantity
+				}, 0)
+			}
+		}
+	})
+	
+	function fetchData(){
+		console.log("fetchData~!~~~~~~~~~");
+		fetch('http://localhost:8080/demo/list')
+		.then((response) => {
+			if(response.ok) {
+				return response.json();
+			}
+		
+			throw new Error('Network response was not ok');
+		})
+		.then(json => {
+			list.params = json
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+	}
+</script>
+
+

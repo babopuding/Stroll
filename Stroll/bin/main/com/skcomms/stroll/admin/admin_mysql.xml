@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skcomms.stroll.dao.SadminDao">
+    
+    <select id="getActorList" parameterType="com.skcomms.stroll.entity.Actor" resultType="com.skcomms.stroll.entity.Actor">
+    	SELECT 
+    	 * 
+    	FROM CITY LIMIT 50
+    </select>
+    
+    <select id="getActorOne" parameterType="com.skcomms.stroll.entity.Actor" resultType="com.skcomms.stroll.entity.Actor">
+    	SELECT 
+    	 * 
+    	FROM CITY LIMIT 1
+    </select>
+    
+    <update id="updateActor" parameterType="com.skcomms.stroll.entity.Actor">
+		 UPDATE  ACTOR		 
+			<set>
+				LAST_UPDATE = SYSDATE			
+				<if test="firstName != null and !''.equals(firstName)"> 
+					, FIRST_NAME = #{firstName}
+				</if>
+				<if test="lastName != null and !''.equals(lastName)"> 
+					, LAST_NAME = #{lastName}
+				</if>
+			</set>
+		<where>
+			<if test="actorId != null and !''.equals(actorId)"> 
+				 ACTOR_ID = #{actorId}
+			</if>
+		</where>   
+	</update>
+    
+    <insert id="insertActor" parameterType="com.skcomms.stroll.entity.Actor">
+    	INSERT INTO ACTOR (
+    		ACTOR_ID,
+    		FIRST_NAME,
+    		LAST_NAME,
+    		LAST_UPDATE
+    	) VALUES (
+    		#{actorId},
+    		#{firstName},
+    		#{lastName},
+    		SYSDATE
+    	)
+    </insert>
+    
+</mapper>
